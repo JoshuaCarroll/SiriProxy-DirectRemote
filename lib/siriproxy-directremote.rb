@@ -4,10 +4,6 @@ require 'pp'
 require 'open-uri'
 require 'json'
 
-#######
-# Remember to add other plugins to the "config.yml" file if you create them!
-######
-
 class SiriProxy::Plugin::DirectRemote < SiriProxy::Plugin
   attr_accessor :host, :rootUrl
 
@@ -16,26 +12,10 @@ class SiriProxy::Plugin::DirectRemote < SiriProxy::Plugin
     self.rootUrl = "http://" + config['host'] + ":8080"
 		
     # Siri responses - Not yet implemented
-    #@responses_wait = [ "One moment.", "Please hold.", "Just a second, please." ]
-    #@responses_ok = [ "No problem.", "Okay.", "Sure.", "Not a problem.", "Sure thing.", "You got it." ]
-    #@response_error = [ "Something went wrong.", "Looks like I can't do that right now.", "Sorry, something is not working." ]
-  end
-  
-  def ProcessResponse(jsonResponse)
-    responseCode = jsonResponse['status']['code']
-    
-    result = case responseCode
-      when 200 then "Ok"
-      when 400 then "Bad Request. The request contains malformed syntax.  The request should not be resent."
-      when 403 then "Forbidden. The server understood the request but is refusing to fulfill it."
-      when 409 then "Conflict. The request could not be completed due to a conflict with resources.  The user might be able to resolve the conflict and resubmit the request."
-      when 500 then "Internal Server Error The server encountered an unexpected condition.  The request cannot be fulfilled."
-      when 503 then "Service Unavailable. The server is currently unable to handle the request due to a temporary overloading of the server.  This is a temporary condition that should be resolved after some delay."
-      when 505 then "HTTP Version Not Supported. The server does not support the HTTP protocol version of the request message."
-      else "Unrecognized response received."
-    end
-
-    puts result
+    # @responses_wait = [ "One moment.", "Please hold.", "Just a second, please." ]
+    # @responses_ok = [ "No problem.", "Okay.", "Sure.", "Not a problem.", "Sure thing.", "You got it." ]
+    # @response_error = [ "Something went wrong.", "Looks like I can't do that right now.", "Sorry, something is not working." ]
+    # @responses_ok[rand(@responses_ok.size)]
   end
 
 #---------------------------------------------------------------------
@@ -160,3 +140,5 @@ class SiriProxy::Plugin::DirectRemote < SiriProxy::Plugin
     request_completed
   end
 end
+
+
