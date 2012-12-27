@@ -1,2 +1,2 @@
-This product is released using the GNU General Public License versino 3, in the hopes that it will inspire other open-source developers to contribute to it.  The license can be read in full at: http://www.gnu.org/licenses/gpl.html
 
+Re-use of the code on this project is licensed under a Creative Commons 3.0 Non-commercial, Attribution, Share-Alike license. In short, this means that you can use my code, modify it, do anything you want. Just don't sell it and make sure you let me know. Also, you must license your derivatives under a compatible license (sorry, no closed-source derivatives). If you would like to purchase a more permissive license (for a closed-source and/or commercial license), please contact me directly. See the Creative Commons site for more information.
