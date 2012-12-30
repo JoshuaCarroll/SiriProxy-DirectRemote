@@ -6,34 +6,73 @@ require_relative "shef-client.rb"
 
 class SiriProxy::Plugin::DirectRemote < SiriProxy::Plugin
 
+  @@response_wait = [ "Let me see.", "One moment.", "Please hold.", "Just a second.", "Hang on a second.", "Hold on a second.", "Just a moment.", "Give me a second.", "One second." ]
+
   def initialize(config = {})
     @host = config['host']
   end
 
-#---------------------------------------------------------------------
+  #_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
   listen_for /what is the receiver address/i do
     say "Here is the address of your DirecTV receiver: " + @host + ".", spoken: "Here is the address of your DirecTV receiver."
-    
     request_completed
   end
 
-#---------------------------------------------------------------------
+  #_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
   listen_for /(are there any new shows|is there anything new) on the DVR/i do
     say "I'm not ready for this input yet."
   end
 
-#---------------------------------------------------------------------
+  #_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
   listen_for /record this.*/i do
     client = ShefClient.new(@host)
     client.record
-    
-    say client.displayText, spoken: client.speechText
-    
-    request_completed
+    finishUp(client)
   end
 
+  #_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+  listen_for /pause.*/i do
+    client = ShefClient.new(@host)
+    client.pause
+    finishUp(client)
+  end
+  
+  #_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+  listen_for /play.*/i do
+    client = ShefClient.new(@host)
+    client.play
+    finishUp(client)
+  end
 
-#---------------------------------------------------------------------
+  #_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+  listen_for /what (am I|are we) watching/i do
+    client = ShefClient.new(@host)
+    client.info
+    finishUp(client)
+  end
+  
+  #_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+  listen_for /what is this rated/i do
+    say @@response_wait[rand(@@response_wait.size)]
+    client = ShefClient.new(@host)
+    client.getRating
+    finishUp(client)
+  end
+  
+  #_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+  listen_for /how much time is left.*/i do
+    client = ShefClient.new(@host)
+    client.getTimeLeft
+    finishUp(client)
+  end
+  
+  #_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+  def finishUp(client)
+    say client.displayText, spoken: client.speechText
+    request_completed
+  end
+  
+  #_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 #  listen_for /what is.*on channel ([0-9,]*[0-9)/i do |number|
 #    html = Net::HTTP.get(URI.parse(rootUrl + '/tv/getProgInfo?major=' + number.to_s()))
 #    hash = JSON.parse html
@@ -52,9 +91,7 @@ class SiriProxy::Plugin::DirectRemote < SiriProxy::Plugin
 #    request_completed
 #  end
 
-
-
-#---------------------------------------------------------------------
+  #_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 #  listen_for /change the.*channel.*(*[0-9,]*[0-9])/i do |number|
 #    say "Detected number: #{number}"
 #
@@ -68,49 +105,6 @@ class SiriProxy::Plugin::DirectRemote < SiriProxy::Plugin
 #      puts hash
 #    request_completed
 #  end
-
-#---------------------------------------------------------------------
-  listen_for /pause.*/i do
-    client = ShefClient.new(@host)
-    client.pause
-    
-    say client.displayText, spoken: client.speechText
-    
-    request_completed
-  end
-  
-#---------------------------------------------------------------------
-  listen_for /play.*/i do
-    client = ShefClient.new(@host)
-    client.play
-    
-    say client.displayText, spoken: client.speechText
-    
-    request_completed
-  end
-
-#---------------------------------------------------------------------
-  listen_for /what (am I|are we) watching/i do
-      html = Net::HTTP.get(URI.parse(rootUrl + '/tv/getTuned?clientAddr=0'))
-      hash = JSON.parse html
-      if(hash['status']['code'] == 200)
-        @words = "You are watching \"" + hash['title'] + "\" "
-        if(hash['isViewed'])
-          @words += "on the DVR."
-        else
-          @words += "on " + hash['callsign'] + ", channel " + hash['major'].to_s() + "."
-        end
-        say @words
-      else 
-        if(hash['status']['code'] == 403)
-          say "It appears I don't have access to that information. You can grant me access to what you are currently viewing by opening the menu on your DirecTV receiver, and changing the Whole-Home settings."
-        else
-          say "I can't get that information right now, sorry."
-        end
-      end
-      puts hash
-    request_completed
-  end
   
 end
 
