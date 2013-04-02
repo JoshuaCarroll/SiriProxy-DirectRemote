@@ -30,7 +30,7 @@ class ShefClient
     self.rating           = json['rating'].to_s()
     self.duration         = json['duration']
     self.offset           = json['offset']
-    self.minutesLeft      = ((self.duration - self.offset) / 60).round
+    self.minutesLeft      = self.duration.nil? || self.offset.nil? ? 0 : ((self.duration - self.offset) / 60).round
     
     
     self.responseDescription = case self.responseCode
