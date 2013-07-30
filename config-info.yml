@@ -1,0 +1,3 @@
+    - name: 'SiriProxy-DirectRemote'
+      git: 'github.com/JoshuaCarroll/SiriProxy-DirectRemote.git'
+      server: 'your.server.ip.here'
