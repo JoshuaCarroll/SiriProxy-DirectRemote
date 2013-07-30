@@ -55,4 +55,4 @@ I am not affiliated with DirecTV in any way.  Their disclaimer for using the SHE
     regarding the specifications, including without limitation any warranty as to merchantability, fitness 
     for a particular purpose, non-interruption of use, or non-infringement.
 
-So there.
+So, just to sum it up... You are authorized to use this software under the Wil Wheaton License.  (That means you can use it, as long as you don't use it to be a dick.)
