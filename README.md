@@ -12,9 +12,13 @@ Setup
 
 The only setup required is to set the value of the host variable in the config file.  This is the IP address of the DirecTV receiver that you want to associate with the plugin.
 
-Copy the contents of `config-info.yml` into your `~/.siriproxy/config.yml`.
+Copy the contents of `config-info.yml` into your `~/.siriproxy/config.yml`.  Edit the config.yml so that the `host` value reflects the IP address of your receiver.  Your `config.yml` file should now look similar to this example, but will have your receiver's IP address as the host value:
 
-Edit the config.yml so that the `host` value reflects the IP address of your receiver.
+```
+name: 'DirectRemote'
+git: 'git://github.com/JoshuaCarroll/SiriProxy-DirectRemote.git'
+host: '192.168.1.100'
+```
 
 Then run `rvmsudo siriproxy update` from the console. Then just start SiriProxy by running `rvmsudo siriproxy server`
 
@@ -25,6 +29,25 @@ Requirements/Components
 2. DirecTV receiver (see note)
 
 Note: DIRECTV high-definition set-top box models H21, HR20 and newer; other models are not supported. While most DirecTV receivers that are capable of connecting to your LAN or WLAN have the required components to receive and process requests through Set-top box HTTP Exported Functionality (SHEF), I do not know if your particular model will do.  It is up to you to see if your receiver has this capability.
+
+Usage
+=====
+
+Currently there are a limiated number of commands/questions that you can use with the SiriProxy-DirectRemote. Those include:
+
+*  What is the receiver address?
+*  Are there any new shows on the DVR?
+*  Is there anything new on the DVR?
+*  Record This
+*  Pause
+*  Play
+*  What am I watching?
+*  What are we watching?
+*  What is this rated?
+*  How much time is left?
+  
+Many of these commands have wildcards in them to allow for normal speech patterns.  For example, to call the `How much time is left` command, one could say `How much time is left in this show` or `How much time is left in the movie we are watching`.
+
 
 Licensing
 =========
